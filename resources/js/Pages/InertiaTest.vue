@@ -8,3 +8,4 @@ import { Link } from '@inertiajs/vue3'
     <Link href="/">Link経由です</Link>
 
 </template>
+<!-- .wslconfigのテスト -->
