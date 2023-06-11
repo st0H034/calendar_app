@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import Vue from 'vue'
+import * as MicroModal from 'micromodal'
 
 export default defineConfig({
     // WSL2でvite開発サーバへアクセスするために必須
@@ -29,5 +31,6 @@ export default defineConfig({
                 },
             },
         }),
+        Vue.use(MicroModal)
     ],
 });

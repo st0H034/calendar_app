@@ -8,10 +8,15 @@
     </div>
   </div>
 
+  <!-- <MicroModal /> -->
+
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
+
+import MicroModal from '@/Components/MicroModal.vue'
 
 // カレンダー用のライブラリのインポート
 import FullCalendar from '@fullcalendar/vue3'
@@ -19,20 +24,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import timePlugin from '@fullcalendar/timegrid'
-
-const addEvent = (info) => { //カレンダーに予定を追加するメソッド
-    let eventName = prompt("イベントを入力して下さい")
-
-    if (eventName) {
-      this.addEvent({
-      title: eventName,
-      start: info.start,
-      end: info.end,
-      allDay: true,
-    });
-  }
-}
-
+import { formatDate } from '@fullcalendar/core'
 
 const calendarOptions = ref({
   // 使用するプラグインを記述
@@ -81,8 +73,14 @@ const calendarOptions = ref({
 
   // 日をクリックしたときの処理
   select: function(info){ // カレンダーに予定を追加する関数
-    let eventName = prompt("イベントを入力して下さい")
-    alert(info.start)
+    let eventName = prompt("予定を入力して下さい")
+
+    /*
+    MicroModal.show('modal-1', {
+      awaitCloseAnimation: true,
+      disableScroll: true
+    });
+    */
 
     if (eventName) {
       this.addEvent({
@@ -96,8 +94,31 @@ const calendarOptions = ref({
 
   // イベントをクリックしたときの処理
   eventClick: function(eventinfo){ // イベントを削除する関数
-    alert('イベント名: ' + eventinfo.event.title)
+
+    let starttime = eventinfo.event.start.toISOString().split("T");
+
+    alert(starttime[0])
+    if (confirm('予定を削除しますか？')){
+      eventinfo.event.remove()
+    }
   },
+
+  // イベントが追加されたときに発生する処理
+  eventAdd: function(eventinfo){
+    // 日付のフォーマットの変換
+    let starttime = eventinfo.event.start.toISOString().split("T");
+    let endtime = eventinfo.event.end.toISOString().split("T");
+
+    router.visit('Calendar/store',{
+      method: 'post',
+      data:{
+        id: eventinfo.event.id,
+        title: eventinfo.event.title,
+        start: starttime[0],
+        end: endtime[0],
+      }
+    })
+  }
 
 
 })
