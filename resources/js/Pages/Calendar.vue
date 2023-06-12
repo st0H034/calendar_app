@@ -12,9 +12,11 @@
 
 </template>
 
+
 <script setup>
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
+import axios from 'axios'
 
 import MicroModal from '@/Components/MicroModal.vue'
 
@@ -24,21 +26,28 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import timePlugin from '@fullcalendar/timegrid'
-import { formatDate } from '@fullcalendar/core'
 
 const calendarOptions = ref({
   // 使用するプラグインを記述
   plugins: [ dayGridPlugin, interactionPlugin, listPlugin, timePlugin],
   initialView: 'dayGridMonth',
 
-  // イベントのテスト
-  events: [
-    {
-      title: 'event1',
-      start: '2023-06-09',
-      end: '2023-06-11'
-    }
-  ],
+  // イベントの表示
+  events: function(info, successCallback, FailureCallback){
+    // イベント取得処理の呼び出し
+    axios
+      .post("Calendar/get", {
+        start_date: info.start.valueOf(),
+        end_date: info.end.valueOf()
+      })
+      .then((response) => {
+        // 追加したイベントを削除
+        successCallback(response.data);
+      })
+      .catch(() => {
+        alert("登録に失敗しました");
+      })
+  },
 
   // ヘッダーの設定
   headerToolbar: {
@@ -80,7 +89,6 @@ const calendarOptions = ref({
       awaitCloseAnimation: true,
       disableScroll: true
     });
-    */
 
     if (eventName) {
       this.addEvent({
@@ -89,36 +97,62 @@ const calendarOptions = ref({
       end: info.end,
       allDay: true,
       });
+    */
+
+    if (eventName){
+      axios
+      .post("Calendar/store", {
+        start_date: info.start.valueOf(),
+        end_date: info.end.valueOf(),
+        title: eventName
+      })
+      .then((response) => {
+        // イベントの追加
+        this.addEvent({
+          title: eventName,
+          start: info.start,
+          end: info.end,
+          allDay: true,
+        })
+      })
+      .catch(() => {
+        alert("登録に失敗しました");
+      })
     }
   },
 
   // イベントをクリックしたときの処理
   eventClick: function(eventinfo){ // イベントを削除する関数
-
-    let starttime = eventinfo.event.start.toISOString().split("T");
-
-    alert(starttime[0])
     if (confirm('予定を削除しますか？')){
-      eventinfo.event.remove()
+      //eventinfo.event.remove()
+
+      axios
+      .post("Calendar/delete", {
+        id: eventinfo.event.id
+      })
+      .then((response) => {
+        // イベントの削除
+        eventinfo.event.remove()
+      })
+      .catch(() => {
+        alert("削除に失敗しました");
+      })
     }
   },
 
   // イベントが追加されたときに発生する処理
-  eventAdd: function(eventinfo){
-    // 日付のフォーマットの変換
-    let starttime = eventinfo.event.start.toISOString().split("T");
-    let endtime = eventinfo.event.end.toISOString().split("T");
-
+  /*eventAdd: function(eventinfo){
+    // Calendarコントローラのstoreメソッドを呼び出す
     router.visit('Calendar/store',{
       method: 'post',
       data:{
         id: eventinfo.event.id,
         title: eventinfo.event.title,
-        start: starttime[0],
-        end: endtime[0],
+        start: eventinfo.event.start.valueOf(),
+        end: eventinfo.event.end.valueOf(),
       }
     })
-  }
+  }*/
 
 
 })

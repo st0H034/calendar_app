@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
-import Vue from 'vue'
+//import Vue from 'vue'
 import * as MicroModal from 'micromodal'
 
 export default defineConfig({
@@ -31,6 +31,6 @@ export default defineConfig({
                 },
             },
         }),
-        Vue.use(MicroModal)
+        //Vue.use(MicroModal)
     ],
 });

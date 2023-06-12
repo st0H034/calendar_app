@@ -33,6 +33,10 @@ Route::post('/inertia', [InertiaTestController::class, 'store'])->name('inertia.
 
 Route::post('/Calendar/store', [ScheduleController::class, 'store'])->name('calendar.store');
 
+Route::post('/Calendar/get', [ScheduleController::class, 'get'])->name('calendar.get');
+
+Route::post('/Calendar/delete', [ScheduleController::class, 'delete'])->name('calendar.delete');
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
