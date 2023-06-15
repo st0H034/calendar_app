@@ -36,7 +36,7 @@ const calendarOptions = ref({
   events: function(info, successCallback, FailureCallback){
     // イベント取得処理の呼び出し
     axios
-      .post("Calendar/get", {
+      .post("/api/eventGet", {
         start_date: info.start.valueOf(),
         end_date: info.end.valueOf()
       })
@@ -101,7 +101,7 @@ const calendarOptions = ref({
 
     if (eventName){
       axios
-      .post("Calendar/store", {
+      .post("/api/eventStore", {
         start_date: info.start.valueOf(),
         end_date: info.end.valueOf(),
         title: eventName
@@ -124,10 +124,9 @@ const calendarOptions = ref({
   // イベントをクリックしたときの処理
   eventClick: function(eventinfo){ // イベントを削除する関数
     if (confirm('予定を削除しますか？')){
-      //eventinfo.event.remove()
 
       axios
-      .post("Calendar/delete", {
+      .post("api/eventDelete", {
         id: eventinfo.event.id
       })
       .then((response) => {
