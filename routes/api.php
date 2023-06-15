@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ScheduleController;
+use Illuminate\Foundation\Application;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/eventStore', [ScheduleController::class, 'store']);
+
+Route::post('/eventGet', [ScheduleController::class, 'get']);
+
+Route::post('/eventDelete', [ScheduleController::class, 'delete']);
