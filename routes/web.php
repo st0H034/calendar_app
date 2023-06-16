@@ -23,7 +23,7 @@ Route::get('/inertia-test', function () {
 });
 */
 
-Route::get('/calendar', function () {
+Route::get('/', function () {
     return Inertia::render('Calendar');
 })->name('calendar');
 
