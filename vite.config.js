@@ -6,11 +6,13 @@ import * as MicroModal from 'micromodal'
 
 export default defineConfig({
     // WSL2でvite開発サーバへアクセスするために必須
+    /*
     server: {
         hmr: {
             host: 'localhost',
         },
     },
+    */
     plugins: [
         laravel({
             input: 'resources/js/app.js',
@@ -24,12 +26,14 @@ export default defineConfig({
                 },
             },
             // WSL2でvite開発サーバへアクセスするために必須
+            /*
             serve: {
                 host: true,
                 hmr: {
                     host: 'localhost',
                 },
             },
+            */
         }),
         //Vue.use(MicroModal)
     ],
